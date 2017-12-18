@@ -19,10 +19,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import app.social.network.controller.CommentController;
+import app.social.network.controller.PostController;
 import app.social.network.controller.UserController;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
+@WebMvcTest(value = { UserController.class, PostController.class, CommentController.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SocialNetworkTest {
 
