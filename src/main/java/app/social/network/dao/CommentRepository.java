@@ -1,5 +1,10 @@
 package app.social.network.dao;
 
-public class CommentRepository {
+import app.social.network.model.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 }
