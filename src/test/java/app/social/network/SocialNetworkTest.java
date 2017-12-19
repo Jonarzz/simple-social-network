@@ -15,14 +15,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import app.social.network.controller.UserController;
-
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SocialNetworkTest {
 
@@ -31,31 +32,36 @@ public class SocialNetworkTest {
 
     @Test
     public void phase1_createUserWithUsernameDavid() throws Exception {
-        mockMvc.perform(post("/user").content(createUserJson("david", "male")))
+        mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createUserJson("david", "male")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase1_createUserWithUsernameDavid_ConflictEror() throws Exception {
-        mockMvc.perform(post("/user").content(createUserJson("david", "male")))
+        mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createUserJson("david", "male")))
                .andExpect(status().isConflict());
     }
 
     @Test
     public void phase1_createUserWithUsernamePhil() throws Exception {
-        mockMvc.perform(post("/user").content(createUserJson("phil", "male")))
+        mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createUserJson("phil", "male")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase1_createUserWithUsernameMargaret() throws Exception {
-        mockMvc.perform(post("/user").content(createUserJson("margaret", "female")))
+        mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createUserJson("margaret", "female")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase1_createUserWithUsernameCousinItt() throws Exception {
-        mockMvc.perform(post("/user").content(createUserJson("cousin_itt", "other")))
+        mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createUserJson("cousin_itt", "other")))
                .andExpect(status().isCreated());
     }
 
@@ -117,37 +123,43 @@ public class SocialNetworkTest {
 
     @Test
     public void phase2_createPost() throws Exception {
-        mockMvc.perform(post("/post").content(createPostJson("david", "This is a test post. Do not reply.")))
+        mockMvc.perform(post("/post").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createPostJson("david", "This is a test post. Do not reply.")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase2_createPostWithoutComments() throws Exception {
-        mockMvc.perform(post("/post").content(createPostJson("cousin_itt", "Hello!")))
+        mockMvc.perform(post("/post").contentType(MediaType.APPLICATION_JSON)
+                                     .content(createPostJson("cousin_itt", "Hello!")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase2_createPostParentComment() throws Exception {
-        mockMvc.perform(post("/post/1/comment").content(createCommentJson("phil", "First comment.")))
+        mockMvc.perform(post("/post/1/comment").contentType(MediaType.APPLICATION_JSON)
+                                               .content(createCommentJson("phil", "First comment.")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase3_createChildComment1() throws Exception {
-        mockMvc.perform(post("/post/1/comment/1").content(createCommentJson("margaret", "He asked not to reply...")))
+        mockMvc.perform(post("/post/1/comment/1").contentType(MediaType.APPLICATION_JSON)
+                                                 .content(createCommentJson("margaret", "He asked not to reply...")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase3_createChildComment2() throws Exception {
-        mockMvc.perform(post("/post/1/comment/1").content(createCommentJson("cousin_itt", "Margaret is right!")))
+        mockMvc.perform(post("/post/1/comment/1").contentType(MediaType.APPLICATION_JSON)
+                                                 .content(createCommentJson("cousin_itt", "Margaret is right!")))
                .andExpect(status().isCreated());
     }
 
     @Test
     public void phase3_incrementScoreOfPostWithId1() throws Exception {
-        mockMvc.perform(patch("/post/1/score").content("\"change\":1"))
+        mockMvc.perform(patch("/post/1/score").contentType(MediaType.APPLICATION_JSON)
+                                              .content("{\"change\":1}"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$[0].id").isNumber())
                .andExpect(jsonPath("$[0].user_ref", is("/user/david")))
@@ -158,7 +170,8 @@ public class SocialNetworkTest {
 
     @Test
     public void phase3_decrementScoreOfPostWithId2() throws Exception {
-        mockMvc.perform(patch("/post/2/score").content("\"change\":-1"))
+        mockMvc.perform(patch("/post/2/score").contentType(MediaType.APPLICATION_JSON)
+                                              .content("{\"change\":-1}"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$[0].id").isNumber())
                .andExpect(jsonPath("$[0].user_ref", is("/user/cousin_itt")))
@@ -169,7 +182,8 @@ public class SocialNetworkTest {
 
     @Test
     public void phase3_decrementScoreOfCommentForPost1WithId1() throws Exception {
-        mockMvc.perform(patch("/post/1/comment/1/score").content("\"change\":-1"))
+        mockMvc.perform(patch("/post/1/comment/1/score").contentType(MediaType.APPLICATION_JSON)
+                                                        .content("{\"change\":-1}"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$[0].id").isNumber())
                .andExpect(jsonPath("$[0].user_ref", is("/user/phil")))
@@ -244,14 +258,14 @@ public class SocialNetworkTest {
     }
 
     private String createUserJson(String name, String sex) {
-        return String.format("\"name\":\"%s\",\"sex\":\"%s\"", name, sex);
+        return String.format("{\"name\":\"%s\",\"sex\":\"%s\"}", name, sex);
     }
 
     private String createPostJson(String author, String text) {
-        return String.format("\"user\":\"%s\",\"text\":\"%s\"", author, text);
+        return String.format("{\"user\":\"%s\",\"text\":\"%s\"}", author, text);
     }
 
     private String createCommentJson(String author, String text) {
-        return String.format("\"user\":\"%s\",\"text\":\"%s\"", author, text);
+        return String.format("{\"user\":\"%s\",\"text\":\"%s\"}", author, text);
     }
 }
