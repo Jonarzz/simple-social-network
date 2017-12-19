@@ -198,16 +198,30 @@ public class SocialNetworkTest {
         mockMvc.perform(get("/post"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(2)))
-               .andExpect(jsonPath("$[0].id").isNumber())
+               .andExpect(jsonPath("$[0].id", is(2)))
                .andExpect(jsonPath("$[0].user_ref", is("/user/cousin_itt")))
+               .andExpect(jsonPath("$[0].comment_ref", is("/post/2/comment")))
                .andExpect(jsonPath("$[0].text", is("Hello!")))
                .andExpect(jsonPath("$[0].score", is(-1)))
                .andExpect(jsonPath("$[0].timestamp").isNumber())
-               .andExpect(jsonPath("$[1].id").isNumber())
+               .andExpect(jsonPath("$[1].id", is(1)))
                .andExpect(jsonPath("$[1].user_ref", is("/user/david")))
                .andExpect(jsonPath("$[1].text", is("This is a test post. Do not reply.")))
+               .andExpect(jsonPath("$[0].comment_ref", is("/post/1/comment")))
                .andExpect(jsonPath("$[1].score", is(1)))
                .andExpect(jsonPath("$[1].timestamp").isNumber());
+    }
+
+    @Test
+    public void phase4_getPostsWithId2() throws Exception {
+        mockMvc.perform(get("/post/2"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id", is(2)))
+               .andExpect(jsonPath("$.user_ref", is("/user/cousin_itt")))
+               .andExpect(jsonPath("$.comment_ref", is("/post/2/comment")))
+               .andExpect(jsonPath("$.text", is("Hello!")))
+               .andExpect(jsonPath("$.score", is(-1)))
+               .andExpect(jsonPath("$.timestamp").isNumber());
     }
 
     @Test
