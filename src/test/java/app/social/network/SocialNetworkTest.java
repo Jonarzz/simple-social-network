@@ -33,7 +33,7 @@ public class SocialNetworkTest {
     @Test
     public void phase1_createUserWithUsernameDavid() throws Exception {
         mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
-                                     .content(createUserJson("david", "male")))
+                                     .content(createUserJson("david", "MALE")))
                .andExpect(status().isCreated());
     }
 
@@ -207,7 +207,7 @@ public class SocialNetworkTest {
                .andExpect(jsonPath("$[1].id", is(1)))
                .andExpect(jsonPath("$[1].user_ref", is("/user/david")))
                .andExpect(jsonPath("$[1].text", is("This is a test post. Do not reply.")))
-               .andExpect(jsonPath("$[0].comment_ref", is("/post/1/comment")))
+               .andExpect(jsonPath("$[1].comment_ref", is("/post/1/comment")))
                .andExpect(jsonPath("$[1].score", is(1)))
                .andExpect(jsonPath("$[1].timestamp").isNumber());
     }
