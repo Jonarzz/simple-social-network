@@ -11,11 +11,15 @@ import java.util.List;
 @Service
 public class PostService {
 
-    @Autowired
-    PostRepository postRepository;
+    private PostRepository postRepository;
 
-    public void createNewPost(Post post) {
-        postRepository.save(post);
+    @Autowired
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
+
+    public Post createNewPost(Post post) {
+        return postRepository.save(post);
     }
 
     public Post getPostById(Long id) {
@@ -28,7 +32,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public List<Post> getPostsOrderedByTimestamp() {
+    public List<Post> getPostsOrderedByTimestampDesc() {
         return postRepository.findAllByOrderByTimestampDesc();
     }
 }

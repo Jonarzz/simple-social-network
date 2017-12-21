@@ -1,7 +1,7 @@
 package app.social.network.model;
 
 import app.social.network.model.Serialization.ToEpochSerializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
@@ -21,6 +21,10 @@ public class Post {
     private String text;
     private Integer score = 0;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonSerialize(using = ToEpochSerializer.class)
+    private Date timestamp;
+
     @Transient
     @JsonInclude
     private String user_ref;
@@ -29,17 +33,13 @@ public class Post {
     @JsonInclude
     private String comment_ref;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonSerialize(using = ToEpochSerializer.class)
-    private Date timestamp;
-
     @PrePersist
     private void prePersist() {
         this.timestamp = new Date();
     }
 
     @PostLoad
-    public void setRefs() {
+    public void postLoad() {
         this.user_ref = "/user/" + user;
         this.comment_ref = "/post/"+ id + "/comment";
     }

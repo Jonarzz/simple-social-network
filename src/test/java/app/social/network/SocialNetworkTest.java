@@ -161,11 +161,11 @@ public class SocialNetworkTest {
         mockMvc.perform(patch("/post/1/score").contentType(MediaType.APPLICATION_JSON)
                                               .content("{\"change\":1}"))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$[0].id").isNumber())
-               .andExpect(jsonPath("$[0].user_ref", is("/user/david")))
-               .andExpect(jsonPath("$[0].text", is("This is a test post. Do not reply.")))
-               .andExpect(jsonPath("$[0].score", is(1)))
-               .andExpect(jsonPath("$[0].timestamp").isNumber());
+               .andExpect(jsonPath("$.id").isNumber())
+               .andExpect(jsonPath("$.user_ref", is("/user/david")))
+               .andExpect(jsonPath("$.text", is("This is a test post. Do not reply.")))
+               .andExpect(jsonPath("$.score", is(1)))
+               .andExpect(jsonPath("$.timestamp").isNumber());
     }
 
     @Test
@@ -173,11 +173,11 @@ public class SocialNetworkTest {
         mockMvc.perform(patch("/post/2/score").contentType(MediaType.APPLICATION_JSON)
                                               .content("{\"change\":-1}"))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$[0].id").isNumber())
-               .andExpect(jsonPath("$[0].user_ref", is("/user/cousin_itt")))
-               .andExpect(jsonPath("$[0].text", is("Hello!")))
-               .andExpect(jsonPath("$[0].score", is(-1)))
-               .andExpect(jsonPath("$[0].timestamp").isNumber());
+               .andExpect(jsonPath("$.id").isNumber())
+               .andExpect(jsonPath("$.user_ref", is("/user/cousin_itt")))
+               .andExpect(jsonPath("$.text", is("Hello!")))
+               .andExpect(jsonPath("$.score", is(-1)))
+               .andExpect(jsonPath("$.timestamp").isNumber());
     }
 
     @Test
@@ -185,12 +185,12 @@ public class SocialNetworkTest {
         mockMvc.perform(patch("/post/1/comment/1/score").contentType(MediaType.APPLICATION_JSON)
                                                         .content("{\"change\":-1}"))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$[0].id").isNumber())
-               .andExpect(jsonPath("$[0].user_ref", is("/user/phil")))
-               .andExpect(jsonPath("$[0].text", is("First comment.")))
-               .andExpect(jsonPath("$[0].parent", IsNull.nullValue()))
-               .andExpect(jsonPath("$[0].score", is(-1)))
-               .andExpect(jsonPath("$[0].timestamp").isNumber());
+               .andExpect(jsonPath("$.id").isNumber())
+               .andExpect(jsonPath("$.user_ref", is("/user/phil")))
+               .andExpect(jsonPath("$.text", is("First comment.")))
+               .andExpect(jsonPath("$.parent", IsNull.nullValue()))
+               .andExpect(jsonPath("$.score", is(-1)))
+               .andExpect(jsonPath("$.timestamp").isNumber());
     }
 
     @Test

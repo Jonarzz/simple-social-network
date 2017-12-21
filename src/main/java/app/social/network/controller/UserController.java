@@ -1,12 +1,9 @@
 package app.social.network.controller;
 
-import app.social.network.model.Enumeration.Sex;
 import app.social.network.model.User;
 import app.social.network.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +21,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity createNewUser(@RequestBody User user) {
-        userService.createNewUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createNewUser(@RequestBody User user) {
+        return userService.createNewUser(user);
     }
 
     @GetMapping

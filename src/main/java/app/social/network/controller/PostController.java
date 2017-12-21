@@ -4,7 +4,6 @@ import app.social.network.model.Post;
 import app.social.network.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +21,9 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity createNewPost(@RequestBody Post post) {
-        postService.createNewPost(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body(post);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post createNewPost(@RequestBody Post post) {
+        return postService.createNewPost(post);
     }
 
     @GetMapping("{id}")
@@ -38,8 +37,8 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Post> getPostsOrderedByTimestamp() {
-        return postService.getPostsOrderedByTimestamp();
+    public List<Post> getPostsOrderedByTimestampDesc() {
+        return postService.getPostsOrderedByTimestampDesc();
     }
 
 }
