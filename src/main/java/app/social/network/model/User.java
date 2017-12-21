@@ -1,5 +1,6 @@
 package app.social.network.model;
 
+import app.social.network.model.Enumeration.Sex;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,14 +10,13 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "user_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq")
     private Long id;
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private Sex sex;
-
-    private enum Sex {MALE, FEMALE}
 
 }
