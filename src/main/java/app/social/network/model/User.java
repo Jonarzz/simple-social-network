@@ -1,9 +1,15 @@
 package app.social.network.model;
 
-import app.social.network.model.Enumeration.Sex;
-import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
-import javax.persistence.*;
+import app.social.network.model.enumeration.Sex;
+import lombok.Data;
 
 @Data
 @Entity

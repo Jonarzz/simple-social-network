@@ -1,38 +1,17 @@
 package app.social.network.service;
 
-import app.social.network.dao.PostRepository;
-import app.social.network.model.Post;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-@Service
-public class PostService {
+import app.social.network.model.Post;
 
-    private PostRepository postRepository;
+public interface PostService {
 
-    @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+    Post createNewPost(Post post);
 
-    public Post createNewPost(Post post) {
-        return postRepository.save(post);
-    }
+    Post getPostById(Long id);
 
-    public Post getPostById(Long id) {
-        return postRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
+    Post changeScoreOfPostWithId(Long id, int change);
 
-    public Post changeScoreOfPostWithId(Long id, Integer change) {
-        Post post = postRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        post.setScore(post.getScore() + change);
-        return postRepository.save(post);
-    }
+    List<Post> getPostsOrderedByTimestampDesc();
 
-    public List<Post> getPostsOrderedByTimestampDesc() {
-        return postRepository.findAllByOrderByTimestampDesc();
-    }
 }
